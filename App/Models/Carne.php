@@ -61,8 +61,8 @@ class Carne
         }
 
       //  $data_vencimento = $data['data_primeiro_vencimento'];
-       //   $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
-         $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
+          $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
+     //     $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
 
 
 
