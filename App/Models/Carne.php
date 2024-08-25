@@ -47,9 +47,11 @@ class Carne
         $date = date_create($data['data_vencimento']);
         $data_vencimento = date_format($date, "Y/m/d ");
         $valor = $data['valor'] ;
-        $numero = $data['numero'] ;
+        $numero = $data['quantidade_parcelas'] -1;
         $entrada =  $valor_entrada == '' || $valor_entrada == 0 ? 'FALSE' : 'TRUE';
         $numero_parcelas = $data['quantidade_parcelas'];
+
+        $valor = number_format($valor_por_parcela, 2);
 
         // Cálculo das parcelas
         $valor_por_parcela = ($data['valor_total'] - $data['entrada']) / $data['quantidade_parcelas'];
@@ -126,7 +128,7 @@ class Carne
                 'valor_entrada' => $valor_entrada,
                 'parcelas' => $lista_parcelas,
                 'data_vencimento' => $data_vencimento,
-                'valor' => number_format($valor_por_parcela, 2),
+                
                 'numero' => $numero,
                 'entrada' => $entrada
             );
