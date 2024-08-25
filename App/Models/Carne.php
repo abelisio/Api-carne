@@ -47,7 +47,7 @@ class Carne
         $date = date_create($data['data_vencimento']);
         $data_vencimento = date_format($date, "Y/m/d ");
         $valor = $data['valor'] ;
-        $numero = $data['quantidade_parcelas'] -1;
+        $numero = $data['quantidade_parcelas'];
         $entrada =  $valor_entrada == '' || $valor_entrada == 0 ? 'FALSE' : 'TRUE';
         $numero_parcelas = $data['quantidade_parcelas'];
 
