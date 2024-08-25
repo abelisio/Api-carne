@@ -50,6 +50,7 @@ class Carne
         $entrada =  $valor_entrada == '' || $valor_entrada == 0 ? 'FALSE' : 'TRUE';
         $numero_parcelas = $data['quantidade_parcelas'];
         $valor = number_format($valor_por_parcela, 2);
+     //   $peri = $data['periodicidade'];
 
         // Cálculo das parcelas
 
@@ -60,29 +61,19 @@ class Carne
             $valor_por_parcela = ($data['valor_total'] - $valor_entrada) / $data['quantidade_parcelas'];
         }
 
-      //  $data_vencimento = $data['data_primeiro_vencimento'];
-          $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
-     //     $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
-
-
-
-        $total = ($valor_por_parcela * $numero_parcelas);
+        $total = ($valor_por_parcela * $numero_parcelas) + $valor_entrada;
         $valor = $valor_por_parcela;
-/*
+
         // Ajustar a data de vencimento conforme a periodicidade
-        if ($periodicidade == 'mensal') {
+        if ($data['periodicidade'] == "mensal") {
+            
             $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
 
-            
-            }
             // Altera a nova data para o último dia do mês
-        } else if ($periodicidade == 'semanal') {
-            $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
-        }
+        } else if ($data['periodicidade'] == "semanal") {
 
-*/
-
-
+          $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
+    }
 
 
         $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
@@ -98,9 +89,7 @@ class Carne
         $stmt->bindValue(':valor_entrada', $data['valor_entrada']);
         $stmt->execute();
 
-
         $carne_id = $connPdo->lastInsertId();
-
 
         if ($entrada > 0) {
 
@@ -128,8 +117,6 @@ class Carne
 
             $lista_parcelas[] = $valor_por_parcela;
 
-
-
             $sql = 'INSERT INTO ' . self::$table_par . '
          (carne_id, total, data_vencimento, valor, numero, entrada, valor_por_parcela ) 
          VALUES (:carne_id, :total, :data_vencimento, :valor_por_parcela, :numero, :entrada, :valor_por_parcela)';
@@ -143,7 +130,6 @@ class Carne
             $stmt->bindValue(':entrada', $entrada);
             $stmt->bindValue(':valor_por_parcela', $valor_por_parcela);
             $stmt->execute();
-
 
             $numero++;
         }
