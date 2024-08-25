@@ -2,6 +2,12 @@
 
 ### Instalação do Projeto
 
+Para instalar o projeto
+
+```
+clone o repósitorio
+```
+
 Para instalar as depêndencias do projeto
 
 ```
