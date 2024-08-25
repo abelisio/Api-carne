@@ -44,13 +44,11 @@ class Carne
         $valor_entrada = $data['valor_entrada'] ?? 0.0;
         $valor_total = $data['valor_total'];
         $date = date_create($data['data_vencimento']);
-        //$data_vencimento = date_format($date, "Y/m/d ");
         $valor = $data['valor'];
         $numero_parcelas = $data['quantidade_parcelas'];
         $entrada =  $valor_entrada == '' || $valor_entrada == 0 ? 'FALSE' : 'TRUE';
         $numero_parcelas = $data['quantidade_parcelas'];
         $valor = number_format($valor_por_parcela, 2);
-     //   $peri = $data['periodicidade'];
 
         // Cálculo das parcelas
 
