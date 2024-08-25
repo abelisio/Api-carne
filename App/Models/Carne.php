@@ -41,21 +41,49 @@ class Carne
     }
     public static function insert($data)
     {
-        $valor_entrada = $data['valor_entrada'];
-        $total = $data['total'];
+        $valor_entrada = $data['valor_entrada'] ?? 0.0;
         $valor_total = $data['valor_total'];
         $date = date_create($data['data_vencimento']);
-        $data_vencimento = date_format($date, "Y/m/d ");
-        $valor = $data['valor'] ;
-        $numero = $data['quantidade_parcelas'];
+        //$data_vencimento = date_format($date, "Y/m/d ");
+        $valor = $data['valor'];
+        $numero_parcelas = $data['quantidade_parcelas'];
         $entrada =  $valor_entrada == '' || $valor_entrada == 0 ? 'FALSE' : 'TRUE';
         $numero_parcelas = $data['quantidade_parcelas'];
-
         $valor = number_format($valor_por_parcela, 2);
 
         // Cálculo das parcelas
-        $valor_por_parcela = ($data['valor_total'] - $data['entrada']) / $data['quantidade_parcelas'];
-        $data_vencimento = $data['data_primeiro_vencimento'];
+
+        if (isset($entrada)) {
+
+            $valor_por_parcela =  ($data['valor_total'] - $valor_entrada)  / $data['quantidade_parcelas'];
+        } else {
+            $valor_por_parcela = ($data['valor_total'] - $valor_entrada) / $data['quantidade_parcelas'];
+        }
+
+      //  $data_vencimento = $data['data_primeiro_vencimento'];
+       //   $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
+         $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
+
+
+
+        $total = ($valor_por_parcela * $numero_parcelas);
+        $valor = $valor_por_parcela;
+/*
+        // Ajustar a data de vencimento conforme a periodicidade
+        if ($periodicidade == 'mensal') {
+            $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
+
+            
+            }
+            // Altera a nova data para o último dia do mês
+        } else if ($periodicidade == 'semanal') {
+            $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
+        }
+
+*/
+
+
+
 
         $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
 
@@ -95,45 +123,44 @@ class Carne
 
         $lista_parcelas = [];
 
-        for ($i = 2; $i <= $numero_pacrelas; $i++) {
 
-            $lista_parcelas[] = number_format($valor_por_parcela, 2);
+        for ($i = 2; $i <= $numero_parcelas; $i++) {
+
+            $lista_parcelas[] = $valor_por_parcela;
+
+
 
             $sql = 'INSERT INTO ' . self::$table_par . '
          (carne_id, total, data_vencimento, valor, numero, entrada, valor_por_parcela ) 
-         VALUES (:carne_id, :total, :data_vencimento, :valor, :numero, :entrada, :valor_por_parcela)';
+         VALUES (:carne_id, :total, :data_vencimento, :valor_por_parcela, :numero, :entrada, :valor_por_parcela)';
             $stmt = $connPdo->prepare($sql);
 
-            $stmt->bindValue(':carne_id', $carne_id);$stmt->bindValue(':total', $total);
+            $stmt->bindValue(':carne_id', $carne_id);
+            $stmt->bindValue(':total', $total);
             $stmt->bindValue(':data_vencimento', $data_vencimento);
-            $stmt->bindValue(':valor', $valor);
+            $stmt->bindValue(':valor', $valor_por_parcela);
             $stmt->bindValue(':numero', $numero);
             $stmt->bindValue(':entrada', $entrada);
             $stmt->bindValue(':valor_por_parcela', $valor_por_parcela);
             $stmt->execute();
 
-            // Ajustar a data de vencimento conforme a periodicidade
-            if ($periodicidade == 'mensal') {
-                $data_vencimento->modify('+1 month');
-            } else if ($periodicidade == 'semanal') {
-                $data_vencimento->modify('+1 week');
-            }
 
             $numero++;
         }
         if ($stmt->rowCount() > 0) {
 
             $saida = array(
-                'valor_total' => number_format($valor_total,2),
+                'valor_total' => number_format($valor_total, 2),
                 'valor_entrada' => $valor_entrada,
                 'parcelas' => $lista_parcelas,
                 'data_vencimento' => $data_vencimento,
-                
-                'numero' => $numero,
+                'total' => $total,
+                'valor' => number_format($valor, 2),
+                'numero' => $numero_parcelas,
                 'entrada' => $entrada
             );
-            return $saida; 
-            
+            return $saida;
+
             throw new \Exception("Falha ao inserir dados do Carnê!");
         }
     }

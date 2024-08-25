@@ -22,14 +22,14 @@ USE `carnes_db`;
 -- Copiando estrutura para tabela carnes_db.carnes
 CREATE TABLE IF NOT EXISTS `carnes` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `valor_total` decimal(10,2) NOT NULL,
+  `valor_total` decimal(10,2) NOT NULL DEFAULT (0),
   `quantidade_parcelas` int NOT NULL,
   `data_primeiro_vencimento` date NOT NULL,
-  `periodicidade` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `valor_entrada` int DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT (now()),
+  `periodicidade` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `valor_entrada` decimal(10,2) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT (now()),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Exportação de dados foi desmarcado.
 
@@ -37,16 +37,16 @@ CREATE TABLE IF NOT EXISTS `carnes` (
 CREATE TABLE IF NOT EXISTS `parcelas` (
   `id` int NOT NULL AUTO_INCREMENT,
   `carne_id` int NOT NULL,
-  `valor` decimal(10,2) NOT NULL,
+  `valor` decimal(10,2) DEFAULT NULL,
   `data_vencimento` date NOT NULL,
-  `numero` int NOT NULL,
-  `entrada` varchar(50) DEFAULT NULL,
-  `total` decimal(10,2) DEFAULT '0.00',
+  `numero` int DEFAULT NULL,
+  `entrada` enum('TRUE','FALSE') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `total` decimal(10,2) DEFAULT NULL,
   `valor_por_parcela` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `carne_id` (`carne_id`),
   CONSTRAINT `parcelas_ibfk_1` FOREIGN KEY (`carne_id`) REFERENCES `carnes` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=595 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1259 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Exportação de dados foi desmarcado.
 
