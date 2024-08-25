@@ -43,7 +43,6 @@ class Carne
     {
         $valor_entrada = $data['valor_entrada'] ?? 0.0;
         $valor_total = $data['valor_total'];
-        $date = date_create($data['data_vencimento']);
         $valor = $data['valor'];
         $numero_parcelas = $data['quantidade_parcelas'];
         $entrada =  $valor_entrada == '' || $valor_entrada == 0 ? 'FALSE' : 'TRUE';
@@ -67,7 +66,6 @@ class Carne
 
             $data_vencimento = date('Y-m-d', strtotime($data['data_primeiro_vencimento'] . '+2 month'));
 
-            // Altera a nova data para o último dia do mês
         } else if ($data['periodicidade'] == "semanal") {
 
             $data_vencimento = date('Y-m-d', strtotime($data['data_primeiro_vencimento'] . '+2 week'));
