@@ -64,14 +64,20 @@ class Carne
 
         // Ajustar a data de vencimento conforme a periodicidade
         if ($data['periodicidade'] == "mensal") {
-            
-            $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 month'));
+
+            $data_vencimento = date('Y-m-d', strtotime($data['data_primeiro_vencimento'] . '+2 month'));
 
             // Altera a nova data para o último dia do mês
         } else if ($data['periodicidade'] == "semanal") {
 
-          $data_vencimento = date('Y/m/d',strtotime($data['data_primeiro_vencimento'] . '+2 week'));
-    }
+            $data_vencimento = date('Y-m-d', strtotime($data['data_primeiro_vencimento'] . '+2 week'));
+        } else if ($data['periodicidade'] == "trimestral") {
+
+            $data_vencimento = date('Y-m-d', strtotime($data['data_primeiro_vencimento'] . '+3 month'));
+        } else if ($data['periodicidade'] == "anual") {
+
+            $data_vencimento = date('Y-m-d', strtotime($data['data_primeiro_vencimento'] . '+12 month'));
+        }
 
 
         $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
