@@ -21,6 +21,14 @@ class CarneController
 
         return Carne::insert($data);
     }
-    public function update() {}
-    public function delete() {}
+    public function update($id) 
+    {
+      $data = $_POST;
+     return Carne::update($id, $data);
+    }
+
+    public function delete($id) 
+    {
+       return Carne::delete($id);
+    }
 }

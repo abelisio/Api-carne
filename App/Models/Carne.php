@@ -152,4 +152,29 @@ class Carne
             throw new \Exception("Falha ao inserir dados do Carnê!");
         }
     }
+
+    // Método para modificar um carne específico
+    public static function update($id, $data)
+    {
+       
+    }
+
+    public static function delete($id)
+    {
+        $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
+
+        // Deletar as parcelas associadas ao carne
+        $sql = 'DELETE FROM ' . self::$table_par . ' WHERE carne_id = :id';
+        $stmt = $connPdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        // Deletar o carne
+        $sql = 'DELETE FROM ' . self::$table . ' WHERE id = :id';
+        $stmt = $connPdo->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        throw new \Exception("Carnê deletado com sucesso!");
+    }
 }
